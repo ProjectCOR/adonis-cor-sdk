@@ -1,0 +1,27 @@
+{
+  "name": "sdk-cor",
+  "version": "1.0.0",
+  "description": "Package inspired in Services to provide support to COR API Integration.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "api",
+    "cor",
+    "integrations",
+    "node"
+  ],
+  "author": "Daniel Guzman <daniel@projectcor.com>",
+  "license": "ISC",
+  "dependencies": {
+    "got": "^9.6.0"
+  },
+  "devDependencies": {
+    "@adonisjs/ace": "^5.0.8",
+    "@adonisjs/fold": "^4.0.9",
+    "@adonisjs/framework": "^5.0.13",
+    "japa": "^2.0.10",
+    "japa-cli": "^1.0.1"
+  }
+}
