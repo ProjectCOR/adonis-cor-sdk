@@ -5,9 +5,7 @@ class CORIntegrationProvider extends ServiceProvider {
   register() {
     const Config = this.app.use('Adonis/Src/Config')
     this.app.singleton('Adonis/Addons/adonis-cor-sdk', () => {
-      const env = Config.get('cor-sdk.env')
-      const sourceURLs = Config.get('cor-sdk.sourceURLs')
-      return new (require('../src/CORIntegration'))({env: env, sourceURLs: sourceURLs})
+      return new (require('../src/CORIntegration'))(Config)
     })
 
     this.app.alias('Adonis/Addons/adonis-cor-sdk', 'adonis-cor-sdk')
