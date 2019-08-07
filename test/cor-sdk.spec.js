@@ -67,7 +67,7 @@ test.group('CorIntegration TESTING', () => {
         
     })
 
-    test('Should receive a new access_token', async (assert) => {
+    test.skip('Should receive a new access_token', async (assert) => {
         let result = null;
         const cor = await new CorIntegration(Config)
 
@@ -91,7 +91,7 @@ test.group('CorIntegration TESTING', () => {
         );
     })
 
-    test('Should create an user', async (assert) => {
+    test.skip('Should create an user', async (assert) => {
         const userData = {
             id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15), // ERP User ID,
             first_name: "TEST", // Required,
@@ -156,7 +156,7 @@ test.group('CorIntegration TESTING', () => {
         
     })
 
-    test('Should create a client', async (assert) => {
+    test.skip('Should create a client', async (assert) => {
         const clientData = {
             id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15), // ERP User ID,
             name: 'Client for testing purpose', // nombre del cliente // Required // Unique
@@ -183,55 +183,4 @@ test.group('CorIntegration TESTING', () => {
             assert.equal(result.statusCode,200)
         
     })
-
-   
-
-    // test('Should create a client', async (assert) => {
-    //     const userData = {
-    //         id: '65', // ERP User ID,
-    //         first_name: "TEST", // Required,
-    //         last_name: "TESTER", // Required,
-    //         email: 'test@mail.com', // Required // Unique,
-    //         password: '123456',
-    //         password_confirm: '123456',
-    //         phone: '+549 1111111111',
-    //         company_id: '900', // ERP Company ID
-    //         cuil: '111111111111', // User tax id,
-    //         salary: 56,
-    //         timezone: 'UTC', // default ‘UTC’,
-    //         role_id: 4, // 1: C-level, 2: Director, 3: Project Manager, 4: Collaborator, 5: Freelancer 
-    //     }
-
-    //     let result = null;
-    //     const cor = await new CorIntegration(Config)
-
-    //     cor.auth_code = auth_code
-        
-    //     await cor.createUser(userData)
-    //         .then((res) => {
-    //             result = res
-    //         })
-    //         .catch((err) => {
-    //             result = err
-    //             console.log('\x1b[31m%s\x1b[0m', err.response.body)
-    //         })
-    //         assert.equal(result.statusCode,200)
-        
-    // })
-
-    // test('should retrieve quote #1', async (assert) => {
-    //   const id = 1;
-
-    //   let result = null;
-
-    //   const Sophos = new Sophos()
-
-    //   Sophos.getQuotes(data).then(quote => {
-    //       result = quote
-    //   }).catch(err => {
-    //       console.log(err)
-    //   })
-
-    //   assert.equal(result.id, id)
-    // })
 })
