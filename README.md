@@ -6,11 +6,7 @@ Adonis Cor SDK is a NPM package for Adonisjs that synchronizes model data entiti
 
 Simply run the below command and follow the instructions below.
 
-    npm install --save adonis-sophos
-
-If using Yarn
-
-    yarn add --save adonis-sophos
+    npm install --save adonis-cor-sdk
 
 ## Register provider
 Register provider inside `start/app.js` file.
