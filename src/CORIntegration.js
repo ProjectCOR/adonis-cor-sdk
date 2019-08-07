@@ -30,13 +30,21 @@ class CorIntegration {
   constructor(Config) {
     this.config = {}
     this.env = Config.env || devVariables.envName;
+    this.auth_code = Config.auth_code || null;
     this.sourceURLs = Config.sourceURLs || {
       sandbox: devVariables.apiEndpoint,
       live: prodVariables.apiEndpoint
     };
+    
 
-    this.auth_code = Config.auth_code || null;
-
+    if (Config.merge !== undefined){
+      console.log("Inicializa el sdk con la configuracion")
+      this.config = Config.merge('cor-sdk', {
+        sourceURLs: this.sourceURLs,
+        env: this.sourceURLs,
+        auth_code: this.auth_code
+      })
+    }
 
   }
 
@@ -125,10 +133,22 @@ class CorIntegration {
   }
 
 
+  /**
+   * Return the current URL as per the environment.
+   *
+   * @readonly
+   * @memberof CorIntegration
+   */
   get currentURL() {
     return this.sourceURLs[this.env]
   }
 
+  /**
+   * Get the access Token granted by the API with OAut2.
+   *
+   * @returns {Promise}
+   * @memberof CorIntegration
+   */
   async _getToken(){
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
@@ -169,6 +189,13 @@ class CorIntegration {
       }
     });
   }
+
+
+  /**********************************
+   *                                *
+   *    API INTEGRATION CALLS       *
+   *                                *
+   **********************************/
 
   /**
    * Create an User by passing a user Data
@@ -735,7 +762,7 @@ class CorIntegration {
    * @returns {Promise}
    * @memberof CorIntegration
    */
-  updateProject(project_id, estimate_id, estimateData = {}) {
+  updateProjectEstimate(project_id, estimate_id, estimateData = {}) {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
