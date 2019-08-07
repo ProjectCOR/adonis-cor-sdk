@@ -1,6 +1,6 @@
 {
-  "name": "sdk-cor",
-  "version": "1.0.0",
+  "name": "adonis-cor-sdk",
+  "version": "1.0.2",
   "description": "Package inspired in Services to provide support to COR API Integration.",
   "main": "index.js",
   "scripts": {
@@ -10,18 +10,31 @@
     "api",
     "cor",
     "integrations",
-    "node"
+    "node",
+    "adonisjs"
   ],
   "author": "Daniel Guzman <daniel@projectcor.com>",
   "license": "ISC",
   "dependencies": {
+    "form-data": "^2.5.0",
     "got": "^9.6.0"
   },
   "devDependencies": {
     "@adonisjs/ace": "^5.0.8",
     "@adonisjs/fold": "^4.0.9",
     "@adonisjs/framework": "^5.0.13",
+    "@adonisjs/sink": "^1.0.17",
     "japa": "^2.0.10",
     "japa-cli": "^1.0.1"
-  }
+  },
+  "standard": {
+    "globals": [
+      "use"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ProjectCOR/adonis-cor-sdk.git"
+  },
+  "homepage": "https://github.com/ProjectCOR/adonis-cor-sdk"
 }

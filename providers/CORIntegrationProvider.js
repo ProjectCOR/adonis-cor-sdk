@@ -2,15 +2,24 @@ const { ServiceProvider } = require('@adonisjs/fold')
 
 class CORIntegrationProvider extends ServiceProvider {
 
-  register () {
-
-    this.app.singleton('Adonis/Addons/CORIntegration', () => {
-        const Config = this.app.use('Adonis/Src/Config')
-    	return new (require('../src/CORIntegration'))(Config)
+  register() {
+    const Config = this.app.use('Adonis/Src/Config')
+    this.app.singleton('Adonis/Addons/adonis-cor-sdk', () => {
+      const env = Config.get('cor-sdk.env')
+      const sourceURLs = Config.get('cor-sdk.sourceURLs')
+      return new (require('../src/CORIntegration'))({env: env, sourceURLs: sourceURLs})
     })
 
-    this.app.alias('Adonis/Addons/CORIntegration', 'CORIntegration')
+    this.app.alias('Adonis/Addons/adonis-cor-sdk', 'adonis-cor-sdk')
 
+    this.app.bind('Adonis/Commands/Sync', () => require('../commands/Sync'))
+
+  }
+
+  boot() {
+    const ace = require('@adonisjs/ace')
+
+    ace.addCommand('Adonis/Commands/Sync')
   }
 
 }
