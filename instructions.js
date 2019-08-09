@@ -7,6 +7,6 @@ module.exports = async (cli) => {
     await cli.copy(path.join(__dirname, 'config/index.js'), path.join(cli.helpers.configPath(), 'cor-sdk.js'))
     cli.command.completed('create', 'config/cor-sdk.js')
   } catch (error) {
-    console.log(error)
+    console.log("config file already exist!")
   }
 }

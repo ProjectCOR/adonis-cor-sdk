@@ -2,6 +2,7 @@
 
 const { Command } = use('@adonisjs/ace')
 const COR = use('adonis-cor-sdk')
+const chalk = require('chalk')
 
 class Sync extends Command {
   static get signature() {
@@ -9,7 +10,7 @@ class Sync extends Command {
   }
 
   static get description() {
-    return `${this.chalk.cyan("Checking for service status")}`
+    return `${chalk.cyan("Checking for service status")}`
   }
 
   async handle(args, options) {
@@ -22,10 +23,10 @@ class Sync extends Command {
     console.log('\x1b[36m%s\x1b[0m', '************************************')
     await COR.checkService()
       .then(res => {
-        console.log(`${this.chalk.green(res.statusCode)} - ${this.chalk.cyan(res.body)}`)
+        console.log(`${chalk.green(res.statusCode)} - ${chalk.cyan(res.body)}`)
       })
       .catch(res => {
-        console.log(`${this.chalk.red(res.statusCode)} - ${this.chalk.cyan(res.body)}`)
+        console.log(`${chalk.red(res.statusCode)} - ${chalk.cyan(res.body)}`)
       })
   }
 }
