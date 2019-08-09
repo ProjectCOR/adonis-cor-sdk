@@ -12,6 +12,7 @@
 const test = require('japa')
 const { Config } = require('@adonisjs/sink')
 const CorIntegration = require('../src/CorIntegration')
+const chalk = require('chalk')
 
 const auth_code = 'oklZmFRhd0CJqMNOqbQtiVh88TlJJJ1MYBp4alpZuF8djyIT6r7Tj6nDf6giOIYS';
 
@@ -67,28 +68,26 @@ test.group('CorIntegration TESTING', () => {
         
     })
 
-    test.skip('Should receive a new access_token', async (assert) => {
+    test('Should receive a new access_token', async (assert) => {
         let result = null;
         const cor = await new CorIntegration(Config)
 
         cor.auth_code = auth_code
-        
         await cor._getToken()
             .then((res) => {
                 result = res
             })
             .catch((err) => {
                 result = err
-                console.log('\x1b[31m%s\x1b[0m', err.response.body)
+                if (err.response != undefined){
+                    console.log(chalk.red(`${err.response.body}`))
+                }else{
+                    console.log(chalk.red(`\t${err}`))
+                }
             })
+
         assert.equal(result.statusCode,200)
-        assert.notDeepEqual(result.body.access_token, 
-            {
-                "access_token":"xxx",
-                "type":"bearer",
-                "refreshToken":null
-            }
-        );
+        
     })
 
     test.skip('Should create an user', async (assert) => {
