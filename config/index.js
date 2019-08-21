@@ -20,8 +20,8 @@ module.exports = {
   |
   */
   sourceURLs: {
-    'development': 'https://test.integrations.projectcor.com',
-    'production': 'https://integrations.projectcor.com'
+    'development': 'https://integrations.sandbox.projectcor.com/',
+    'production': 'https://integrations.projectcor.com/'
   },
 
   /*
