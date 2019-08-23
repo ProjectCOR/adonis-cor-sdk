@@ -155,7 +155,7 @@ test.group('CorIntegration TESTING', () => {
         
     })
 
-    test('Should create a client', async (assert) => {
+    test.skip('Should create a client', async (assert) => {
         const clientData = {
             id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15), // ERP User ID,
             name: 'Client for testing purpose', // nombre del cliente // Required // Unique
@@ -182,7 +182,7 @@ test.group('CorIntegration TESTING', () => {
             assert.equal(result.statusCode,200)
         
     })
-    test('Should create a Project', async (assert) => {
+    test.skip('Should create a Project', async (assert) => {
         const projectData = { "id": "005362", "client_id": "DAN", "brand_id": null, "product_id": "00", "fee_id": 0, "name": "ADV_SCRIPT_1", "start": "2019-08-23T00:00:00", "end": "0001-01-01T00:00:00", "currency": null, "brief": null, "frequency": 0, "estimated_time": 0, "id_externo": "005362" }
 
         let result = null;
