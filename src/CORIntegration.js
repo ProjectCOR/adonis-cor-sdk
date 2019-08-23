@@ -38,7 +38,6 @@ class CorIntegration {
     
 
     if (Config.merge !== undefined){
-      console.log("Inicializa el sdk con la configuracion")
       this.config = Config.merge('cor-sdk', {
         sourceURLs: this.sourceURLs,
         env: this.sourceURLs,
@@ -156,7 +155,7 @@ class CorIntegration {
           const endpoint = `/oauth2/token?grant_type=authorization_code`;
 
           const form = new FormData();
-          form.append('code', this.auth_code);
+          if (this.auth_code != undefined) form.append('code', this.auth_code);
 
           const options = {
             baseUrl: this.currentURL,
@@ -214,7 +213,7 @@ class CorIntegration {
   
             const form = new FormData();
             for(let key in userData){
-                form.append(key, userData[key]);
+              if (userData[key] != undefined) form.append(key, userData[key]);
             }
   
             const options = {
@@ -259,7 +258,7 @@ class CorIntegration {
   
             const form = new FormData();
             for(let key in userData){
-                form.append(key, userData[key]);
+              if (userData[key] != undefined) form.append(key, userData[key]);
             }
   
             const options = {
@@ -301,7 +300,7 @@ class CorIntegration {
   
             const form = new FormData();
             for(let key in clientData){
-                form.append(key, clientData[key]);
+                if (clientData[key] != undefined) form.append(key, clientData[key]);
             }
             
             const options = {
@@ -345,7 +344,7 @@ class CorIntegration {
   
             const form = new FormData();
             for(let key in clientData){
-                form.append(key, clientData[key]);
+                if (clientData[key] != undefined) form.append(key, clientData[key]);
             }
   
             const options = {
@@ -387,7 +386,7 @@ class CorIntegration {
   
             const form = new FormData();
             for(let key in brandData){
-                form.append(key, brandData[key]);
+                if (brandData[key] != undefined) form.append(key, brandData[key]);
             }
             
             const options = {
@@ -430,7 +429,7 @@ class CorIntegration {
   
             const form = new FormData();
             for(let key in brandData){
-                form.append(key, brandData[key]);
+                if (brandData[key] != undefined) form.append(key, brandData[key]);
             }
   
             const options = {
@@ -472,7 +471,7 @@ class CorIntegration {
   
             const form = new FormData();
             for(let key in productData){
-                form.append(key, productData[key]);
+                if (productData[key] != undefined) form.append(key, productData[key]);
             }
             
             const options = {
@@ -515,7 +514,7 @@ class CorIntegration {
   
             const form = new FormData();
             for(let key in productData){
-                form.append(key, productData[key]);
+                if (productData[key] != undefined) form.append(key, productData[key]);
             }
   
             const options = {
@@ -557,7 +556,7 @@ class CorIntegration {
   
             const form = new FormData();
             for(let key in feeData){
-                form.append(key, feeData[key]);
+                if (feeData[key] != undefined) form.append(key, feeData[key]);
             }
             
             const options = {
@@ -600,7 +599,7 @@ class CorIntegration {
   
             const form = new FormData();
             for(let key in feeData){
-                form.append(key, feeData[key]);
+                if (feeData[key] != undefined) form.append(key, feeData[key]);
             }
   
             const options = {
@@ -642,7 +641,7 @@ class CorIntegration {
   
             const form = new FormData();
             for(let key in projectData){
-                form.append(key, projectData[key]);
+                if (projectData[key] != undefined) form.append(key, projectData[key]);
             }
             
             const options = {
@@ -685,7 +684,7 @@ class CorIntegration {
   
             const form = new FormData();
             for(let key in projectData){
-                form.append(key, projectData[key]);
+                if (projectData[key] != undefined) form.append(key, projectData[key]);
             }
   
             const options = {
@@ -728,7 +727,7 @@ class CorIntegration {
   
             const form = new FormData();
             for(let key in estimateData){
-                form.append(key, estimateData[key]);
+                if (estimateData[key] != undefined) form.append(key, estimateData[key]);
             }
             
             const options = {
@@ -772,7 +771,7 @@ class CorIntegration {
   
             const form = new FormData();
             for(let key in estimateData){
-                form.append(key, estimateData[key]);
+                if (estimateData[key] != undefined) form.append(key, estimateData[key]);
             }
   
             const options = {

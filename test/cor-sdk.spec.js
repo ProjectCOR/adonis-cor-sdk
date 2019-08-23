@@ -14,7 +14,7 @@ const { Config } = require('@adonisjs/sink')
 const CorIntegration = require('../src/CorIntegration')
 const chalk = require('chalk')
 
-const auth_code = 'oklZmFRhd0CJqMNOqbQtiVh88TlJJJ1MYBp4alpZuF8djyIT6r7Tj6nDf6giOIYS';
+const auth_code = 'hd2LZ2YHHT2zE8Fh9qebSJfrzU7525Gz85xhkN4eMt6cD8kadzukUvbtg4hT4kMT';
 
 test.group('CorIntegration TESTING', () => {
     test('Should check the server availability', async (assert) => {
@@ -155,7 +155,7 @@ test.group('CorIntegration TESTING', () => {
         
     })
 
-    test.skip('Should create a client', async (assert) => {
+    test('Should create a client', async (assert) => {
         const clientData = {
             id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15), // ERP User ID,
             name: 'Client for testing purpose', // nombre del cliente // Required // Unique
@@ -172,6 +172,25 @@ test.group('CorIntegration TESTING', () => {
         cor.auth_code = auth_code
         
         await cor.createClient(clientData)
+            .then((res) => {
+                result = res
+            })
+            .catch((err) => {
+                result = err
+                console.log('\x1b[31m%s\x1b[0m', err.response.body)
+            })
+            assert.equal(result.statusCode,200)
+        
+    })
+    test('Should create a Project', async (assert) => {
+        const projectData = { "id": "005362", "client_id": "DAN", "brand_id": null, "product_id": "00", "fee_id": 0, "name": "ADV_SCRIPT_1", "start": "2019-08-23T00:00:00", "end": "0001-01-01T00:00:00", "currency": null, "brief": null, "frequency": 0, "estimated_time": 0, "id_externo": "005362" }
+
+        let result = null;
+        const cor = await new CorIntegration(Config)
+
+        cor.auth_code = auth_code
+        
+        await cor.createProject(projectData)
             .then((res) => {
                 result = res
             })
