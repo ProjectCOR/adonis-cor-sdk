@@ -354,7 +354,7 @@ class CorIntegration {
                 Authorization: `Bearer ${JSON.parse(res.body).access_token}`
               }
             }
-            const response = await got.post(endpoint, options)
+            const response = await got.put(endpoint, options)
             resolve(response)
           } catch (error) {
             reject(error)
@@ -439,7 +439,7 @@ class CorIntegration {
                 Authorization: `Bearer ${JSON.parse(res.body).access_token}`
               }
             }
-            const response = await got.post(endpoint, options)
+            const response = await got.put(endpoint, options)
             resolve(response)
           } catch (error) {
             reject(error)
@@ -524,7 +524,7 @@ class CorIntegration {
                 Authorization: `Bearer ${JSON.parse(res.body).access_token}`
               }
             }
-            const response = await got.post(endpoint, options)
+            const response = await got.put(endpoint, options)
             resolve(response)
           } catch (error) {
             reject(error)
@@ -609,7 +609,7 @@ class CorIntegration {
                 Authorization: `Bearer ${JSON.parse(res.body).access_token}`
               }
             }
-            const response = await got.post(endpoint, options)
+            const response = await got.put(endpoint, options)
             resolve(response)
           } catch (error) {
             reject(error)
@@ -694,7 +694,7 @@ class CorIntegration {
                 Authorization: `Bearer ${JSON.parse(res.body).access_token}`
               }
             }
-            const response = await got.post(endpoint, options)
+            const response = await got.put(endpoint, options)
             resolve(response)
           } catch (error) {
             reject(error)
@@ -781,7 +781,7 @@ class CorIntegration {
                 Authorization: `Bearer ${JSON.parse(res.body).access_token}`
               }
             }
-            const response = await got.post(endpoint, options)
+            const response = await got.put(endpoint, options)
             resolve(response)
           } catch (error) {
             reject(error)
