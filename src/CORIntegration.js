@@ -796,5 +796,90 @@ class CorIntegration {
     })
   }
 
+  /**
+   * Create an Hour by passing a data
+   *
+   * @param {Object} [hourData={}]
+   * @returns {Promise} 
+   * @memberof CorIntegration
+   */
+  createHour(hourData = {}) {
+    return new Promise(async (resolve, reject) => {
+      if (this.auth_code) {
+        this._getToken()
+        .then(async (res) => {
+          try {
+            const endpoint = `/hours`;
+  
+            const form = new FormData();
+            for(let key in hourData){
+                if (hourData[key] != undefined) form.append(key, hourData[key]);
+            }
+            
+            const options = {
+              baseUrl: this.currentURL,
+              body: form,
+              headers: {
+                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+              }
+            }
+            const response = await got.post(endpoint, options)
+            resolve(response)
+          } catch (error) {
+            reject(error)
+          }
+        })
+        .catch((error) => {
+          reject(error)
+        })
+      } else {
+        reject(new Error('Undefined Authorization Code'))
+      }
+    })
+  }
+
+  /**
+   * Update a Hour by passing a hour_id and Hour Data
+   *
+   * @param {Number} hour_id
+   * @param {Object} [hourData={}]
+   * @returns {Promise}
+   * @memberof CorIntegration
+   */
+  updateHour(hour_id, hourData = {}) {
+    return new Promise(async (resolve, reject) => {
+      if (this.auth_code) {
+        this._getToken()
+        .then(async (res) => {
+          try {
+            const endpoint = `/hours/${hour_id}`;
+  
+            const form = new FormData();
+            for(let key in hourData){
+                if (hourData[key] != undefined) form.append(key, hourData[key]);
+            }
+  
+            const options = {
+              baseUrl: this.currentURL,
+              body: form,
+              headers: {
+                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+              }
+            }
+            const response = await got.put(endpoint, options)
+            resolve(response)
+          } catch (error) {
+            reject(error)
+          }
+        })
+        .catch((error) => {
+          reject(error)
+        })
+      } else {
+        reject(new Error('Undefined Authorization Code'))
+      }
+    })
+  }
+
 
 } module.exports = CorIntegration
