@@ -374,6 +374,41 @@ class CorIntegration {
   }
 
   /**
+   * Delete a Client by passing a client_id
+   *
+   * @param {Number} client_id
+   * @returns {Promise}
+   * @memberof CorIntegration
+   */
+  deleteClient(client_id) {
+    return new Promise(async (resolve, reject) => {
+      if (this.auth_code) {
+        this._getToken()
+          .then(async (res) => {
+            try {
+              const endpoint = `/clients/${client_id}`;
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'DELETE',
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
+            }
+          })
+          .catch((error) => {
+            reject(error)
+          })
+      } else {
+        reject(new Error('Undefined Authorization Code'))
+      }
+    })
+  }
+
+  /**
    * Create a Brand by passing a Brand Data
    *
    * @param {Object} [brandData={}]
@@ -430,6 +465,41 @@ class CorIntegration {
                 endpoint: endpoint,
                 type: 'PUT',
                 data: brandData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
+            }
+          })
+          .catch((error) => {
+            reject(error)
+          })
+      } else {
+        reject(new Error('Undefined Authorization Code'))
+      }
+    })
+  }
+
+  /**
+   * Delete a Brand by passing a brand_id
+   *
+   * @param {Number} brand_id
+   * @returns {Promise}
+   * @memberof CorIntegration
+   */
+  deleteBrand(brand_id) {
+    return new Promise(async (resolve, reject) => {
+      if (this.auth_code) {
+        this._getToken()
+          .then(async (res) => {
+            try {
+              const endpoint = `/brands/${brand_id}`;
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'DELETE',
                 headers: {
                   Authorization: `Bearer ${JSON.parse(res.body).access_token}`
                 }
@@ -524,6 +594,41 @@ class CorIntegration {
   }
 
   /**
+   * Delete a Product by passing a product_id
+   *
+   * @param {Number} product_id
+   * @returns {Promise}
+   * @memberof CorIntegration
+   */
+  deleteProduct(product_id) {
+    return new Promise(async (resolve, reject) => {
+      if (this.auth_code) {
+        this._getToken()
+          .then(async (res) => {
+            try {
+              const endpoint = `/products/${product_id}`;
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'DELETE',
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
+            }
+          })
+          .catch((error) => {
+            reject(error)
+          })
+      } else {
+        reject(new Error('Undefined Authorization Code'))
+      }
+    })
+  }
+
+  /**
    * Create a Fee by passing a Fee Data
    *
    * @param {Object} [feeData={}]
@@ -580,6 +685,41 @@ class CorIntegration {
                 endpoint: endpoint,
                 type: 'PUT',
                 data: feeData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
+            }
+          })
+          .catch((error) => {
+            reject(error)
+          })
+      } else {
+        reject(new Error('Undefined Authorization Code'))
+      }
+    })
+  }
+
+  /**
+   * Delete a Fee by passing a fee_id
+   *
+   * @param {Number} fee_id
+   * @returns {Promise}
+   * @memberof CorIntegration
+   */
+  deleteFee(fee_id) {
+    return new Promise(async (resolve, reject) => {
+      if (this.auth_code) {
+        this._getToken()
+          .then(async (res) => {
+            try {
+              const endpoint = `/fees/${fee_id}`;
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'DELETE',
                 headers: {
                   Authorization: `Bearer ${JSON.parse(res.body).access_token}`
                 }
@@ -674,6 +814,41 @@ class CorIntegration {
   }
 
   /**
+   * Delete a Project by passing a project_id
+   *
+   * @param {Number} project_id
+   * @returns {Promise}
+   * @memberof CorIntegration
+   */
+  deleteProject(project_id) {
+    return new Promise(async (resolve, reject) => {
+      if (this.auth_code) {
+        this._getToken()
+          .then(async (res) => {
+            try {
+              const endpoint = `/projects/${project_id}`;
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'DELETE',
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
+            }
+          })
+          .catch((error) => {
+            reject(error)
+          })
+      } else {
+        reject(new Error('Undefined Authorization Code'))
+      }
+    })
+  }
+
+  /**
    * Create a Project Estimate by passing a Data
    *
    * @param {Number} [project_id]
@@ -732,6 +907,42 @@ class CorIntegration {
                 endpoint: endpoint,
                 type: 'PUT',
                 data: estimateData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
+            }
+          })
+          .catch((error) => {
+            reject(error)
+          })
+      } else {
+        reject(new Error('Undefined Authorization Code'))
+      }
+    })
+  }
+
+  /**
+   * Delete a Project Estimate by passing a project_id and a estimate_id
+   *
+   * @param {Number} project_id
+   * @param {Number} estimate_id
+   * @returns {Promise}
+   * @memberof CorIntegration
+   */
+  deleteProjectEstimate(project_id, estimate_id) {
+    return new Promise(async (resolve, reject) => {
+      if (this.auth_code) {
+        this._getToken()
+          .then(async (res) => {
+            try {
+              const endpoint = `/projects/${project_id}/project_estimate/${estimate_id}`;
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'DELETE',
                 headers: {
                   Authorization: `Bearer ${JSON.parse(res.body).access_token}`
                 }
