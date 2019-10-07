@@ -35,9 +35,9 @@ class CorIntegration {
       sandbox: devVariables.apiEndpoint,
       live: prodVariables.apiEndpoint
     };
-    
 
-    if (Config.merge !== undefined){
+
+    if (Config.merge !== undefined) {
       this.config = Config.merge('cor-sdk', {
         sourceURLs: this.sourceURLs,
         env: this.sourceURLs,
@@ -148,20 +148,19 @@ class CorIntegration {
    * @returns {Promise}
    * @memberof CorIntegration
    */
-  async _getToken(){
+  async _getToken() {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         try {
           const endpoint = `/oauth2/token?grant_type=authorization_code`;
 
-          const form = new FormData();
-          if (this.auth_code != undefined) form.append('code', this.auth_code);
-
-          const options = {
-            baseUrl: this.currentURL,
-            body: form
-          }
-          const response = await got.post(endpoint, options)
+          const response = await this._sendRequest({
+            endpoint: endpoint,
+            type: 'POST',
+            data: {
+              code: this.auth_code
+            }
+          })
           resolve(response)
         } catch (error) {
           reject(error)
@@ -170,6 +169,33 @@ class CorIntegration {
         reject(new Error('Undefined Authorization Code'))
       }
     })
+  }
+
+  /**
+   * Sends an Http Request to the endpoint.
+   * 
+   * It receives an object with the basic setup: endpoint (default null),
+   * type (default GET), headers and some data to be sent into a form data.
+   *
+   * @param {*} [{ endpoint: endpoint = null, type: type = 'GET', headers: headers = {}, data: data = {} }={}]
+   * @param {*} arg
+   * @returns {Promise} A Promise object from the http request.
+   * @memberof CorIntegration
+   */
+  async _sendRequest({ endpoint: endpoint = null, type: type = 'GET', headers: headers = {}, data: data = {} } = {}, ...arg) {
+
+    const form = new FormData();
+    for (let key in data) {
+      if (data[key] != undefined) form.append(key, data[key]);
+    }
+
+    const options = {
+      baseUrl: this.currentURL,
+      method: type.toUpperCase(),
+      body: form,
+      headers: headers
+    }
+    return await got(endpoint, options)
   }
 
   /**
@@ -207,32 +233,27 @@ class CorIntegration {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
-        .then(async (res) => {
-          try {
-            const endpoint = `/users`;
-  
-            const form = new FormData();
-            for(let key in userData){
-              if (userData[key] != undefined) form.append(key, userData[key]);
+          .then(async (res) => {
+            try {
+              const endpoint = `/users`;
+
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'POST',
+                data: userData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
             }
-  
-            const options = {
-              baseUrl: this.currentURL,
-              body: form,
-              headers: {
-                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
-              }
-            }
-            const response = await got.post(endpoint, options)
-            resolve(response)
-          } catch (error) {
+          })
+          .catch((error) => {
             reject(error)
-          }
-        })
-        .catch((error) => {
-          reject(error)
-        })
-        
+          })
+
       } else {
         reject(new Error('Undefined Authorization Code'))
       }
@@ -252,31 +273,25 @@ class CorIntegration {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
-        .then(async (res) => {
-          try {
-            const endpoint = `/users/${user_id}`;
-  
-            const form = new FormData();
-            for(let key in userData){
-              if (userData[key] != undefined) form.append(key, userData[key]);
+          .then(async (res) => {
+            try {
+              const endpoint = `/users/${user_id}`;
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'PUT',
+                data: userData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
             }
-  
-            const options = {
-              baseUrl: this.currentURL,
-              body: form,
-              headers: {
-                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
-              }
-            }
-            const response = await got.put(endpoint, options)
-            resolve(response)
-          } catch (error) {
+          })
+          .catch((error) => {
             reject(error)
-          }
-        })
-        .catch((error) => {
-          reject(error)
-        })
+          })
       } else {
         reject(new Error('Undefined Authorization Code'))
       }
@@ -286,7 +301,7 @@ class CorIntegration {
   /**
    * Create a Client by passing a Client Data
    *
-   * @param {Object} [userData={}]
+   * @param {Object} [clientData={}]
    * @returns {Promise} 
    * @memberof CorIntegration
    */
@@ -294,38 +309,33 @@ class CorIntegration {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
-        .then(async (res) => {
-          try {
-            const endpoint = `/clients`;
-  
-            const form = new FormData();
-            for(let key in clientData){
-                if (clientData[key] != undefined) form.append(key, clientData[key]);
+          .then(async (res) => {
+            try {
+              const endpoint = `/clients`;
+
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'POST',
+                data: clientData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
             }
-            
-            const options = {
-              baseUrl: this.currentURL,
-              body: form,
-              headers: {
-                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
-              }
-            }
-            const response = await got.post(endpoint, options)
-            resolve(response)
-          } catch (error) {
+          })
+          .catch((error) => {
             reject(error)
-          }
-        })
-        .catch((error) => {
-          reject(error)
-        })
+          })
       } else {
         reject(new Error('Undefined Authorization Code'))
       }
     })
   }
 
- 
+
   /**
    * Update a Client by passing a client_id and client Data
    *
@@ -338,31 +348,25 @@ class CorIntegration {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
-        .then(async (res) => {
-          try {
-            const endpoint = `/clients/${client_id}`;
-  
-            const form = new FormData();
-            for(let key in clientData){
-                if (clientData[key] != undefined) form.append(key, clientData[key]);
+          .then(async (res) => {
+            try {
+              const endpoint = `/clients/${client_id}`;
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'PUT',
+                data: clientData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
             }
-  
-            const options = {
-              baseUrl: this.currentURL,
-              body: form,
-              headers: {
-                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
-              }
-            }
-            const response = await got.put(endpoint, options)
-            resolve(response)
-          } catch (error) {
+          })
+          .catch((error) => {
             reject(error)
-          }
-        })
-        .catch((error) => {
-          reject(error)
-        })
+          })
       } else {
         reject(new Error('Undefined Authorization Code'))
       }
@@ -380,31 +384,26 @@ class CorIntegration {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
-        .then(async (res) => {
-          try {
-            const endpoint = `/brands`;
-  
-            const form = new FormData();
-            for(let key in brandData){
-                if (brandData[key] != undefined) form.append(key, brandData[key]);
+          .then(async (res) => {
+            try {
+              const endpoint = `/brands`;
+
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'POST',
+                data: brandData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
             }
-            
-            const options = {
-              baseUrl: this.currentURL,
-              body: form,
-              headers: {
-                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
-              }
-            }
-            const response = await got.post(endpoint, options)
-            resolve(response)
-          } catch (error) {
+          })
+          .catch((error) => {
             reject(error)
-          }
-        })
-        .catch((error) => {
-          reject(error)
-        })
+          })
       } else {
         reject(new Error('Undefined Authorization Code'))
       }
@@ -423,31 +422,26 @@ class CorIntegration {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
-        .then(async (res) => {
-          try {
-            const endpoint = `/brands/${brand_id}`;
-  
-            const form = new FormData();
-            for(let key in brandData){
-                if (brandData[key] != undefined) form.append(key, brandData[key]);
+          .then(async (res) => {
+            try {
+              const endpoint = `/brands/${brand_id}`;
+
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'PUT',
+                data: brandData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
             }
-  
-            const options = {
-              baseUrl: this.currentURL,
-              body: form,
-              headers: {
-                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
-              }
-            }
-            const response = await got.put(endpoint, options)
-            resolve(response)
-          } catch (error) {
+          })
+          .catch((error) => {
             reject(error)
-          }
-        })
-        .catch((error) => {
-          reject(error)
-        })
+          })
       } else {
         reject(new Error('Undefined Authorization Code'))
       }
@@ -465,31 +459,26 @@ class CorIntegration {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
-        .then(async (res) => {
-          try {
-            const endpoint = `/products`;
-  
-            const form = new FormData();
-            for(let key in productData){
-                if (productData[key] != undefined) form.append(key, productData[key]);
+          .then(async (res) => {
+            try {
+              const endpoint = `/products`;
+
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'POST',
+                data: productData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
             }
-            
-            const options = {
-              baseUrl: this.currentURL,
-              body: form,
-              headers: {
-                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
-              }
-            }
-            const response = await got.post(endpoint, options)
-            resolve(response)
-          } catch (error) {
+          })
+          .catch((error) => {
             reject(error)
-          }
-        })
-        .catch((error) => {
-          reject(error)
-        })
+          })
       } else {
         reject(new Error('Undefined Authorization Code'))
       }
@@ -508,31 +497,26 @@ class CorIntegration {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
-        .then(async (res) => {
-          try {
-            const endpoint = `/products/${product_id}`;
-  
-            const form = new FormData();
-            for(let key in productData){
-                if (productData[key] != undefined) form.append(key, productData[key]);
+          .then(async (res) => {
+            try {
+              const endpoint = `/products/${product_id}`;
+
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'PUT',
+                data: productData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
             }
-  
-            const options = {
-              baseUrl: this.currentURL,
-              body: form,
-              headers: {
-                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
-              }
-            }
-            const response = await got.put(endpoint, options)
-            resolve(response)
-          } catch (error) {
+          })
+          .catch((error) => {
             reject(error)
-          }
-        })
-        .catch((error) => {
-          reject(error)
-        })
+          })
       } else {
         reject(new Error('Undefined Authorization Code'))
       }
@@ -550,31 +534,26 @@ class CorIntegration {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
-        .then(async (res) => {
-          try {
-            const endpoint = `/fees`;
-  
-            const form = new FormData();
-            for(let key in feeData){
-                if (feeData[key] != undefined) form.append(key, feeData[key]);
+          .then(async (res) => {
+            try {
+              const endpoint = `/fees`;
+
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'POST',
+                data: feeData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
             }
-            
-            const options = {
-              baseUrl: this.currentURL,
-              body: form,
-              headers: {
-                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
-              }
-            }
-            const response = await got.post(endpoint, options)
-            resolve(response)
-          } catch (error) {
+          })
+          .catch((error) => {
             reject(error)
-          }
-        })
-        .catch((error) => {
-          reject(error)
-        })
+          })
       } else {
         reject(new Error('Undefined Authorization Code'))
       }
@@ -593,31 +572,26 @@ class CorIntegration {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
-        .then(async (res) => {
-          try {
-            const endpoint = `/fees/${fee_id}`;
-  
-            const form = new FormData();
-            for(let key in feeData){
-                if (feeData[key] != undefined) form.append(key, feeData[key]);
+          .then(async (res) => {
+            try {
+              const endpoint = `/fees/${fee_id}`;
+
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'PUT',
+                data: feeData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
             }
-  
-            const options = {
-              baseUrl: this.currentURL,
-              body: form,
-              headers: {
-                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
-              }
-            }
-            const response = await got.put(endpoint, options)
-            resolve(response)
-          } catch (error) {
+          })
+          .catch((error) => {
             reject(error)
-          }
-        })
-        .catch((error) => {
-          reject(error)
-        })
+          })
       } else {
         reject(new Error('Undefined Authorization Code'))
       }
@@ -635,31 +609,26 @@ class CorIntegration {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
-        .then(async (res) => {
-          try {
-            const endpoint = `/projects`;
-  
-            const form = new FormData();
-            for(let key in projectData){
-                if (projectData[key] != undefined) form.append(key, projectData[key]);
+          .then(async (res) => {
+            try {
+              const endpoint = `/projects`;
+
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'POST',
+                data: projectData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
             }
-            
-            const options = {
-              baseUrl: this.currentURL,
-              body: form,
-              headers: {
-                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
-              }
-            }
-            const response = await got.post(endpoint, options)
-            resolve(response)
-          } catch (error) {
+          })
+          .catch((error) => {
             reject(error)
-          }
-        })
-        .catch((error) => {
-          reject(error)
-        })
+          })
       } else {
         reject(new Error('Undefined Authorization Code'))
       }
@@ -678,31 +647,26 @@ class CorIntegration {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
-        .then(async (res) => {
-          try {
-            const endpoint = `/projects/${project_id}`;
-  
-            const form = new FormData();
-            for(let key in projectData){
-                if (projectData[key] != undefined) form.append(key, projectData[key]);
+          .then(async (res) => {
+            try {
+              const endpoint = `/projects/${project_id}`;
+
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'PUT',
+                data: projectData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
             }
-  
-            const options = {
-              baseUrl: this.currentURL,
-              body: form,
-              headers: {
-                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
-              }
-            }
-            const response = await got.put(endpoint, options)
-            resolve(response)
-          } catch (error) {
+          })
+          .catch((error) => {
             reject(error)
-          }
-        })
-        .catch((error) => {
-          reject(error)
-        })
+          })
       } else {
         reject(new Error('Undefined Authorization Code'))
       }
@@ -721,31 +685,26 @@ class CorIntegration {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
-        .then(async (res) => {
-          try {
-            const endpoint = `/projects/${project_id}/project_estimate`;
-  
-            const form = new FormData();
-            for(let key in estimateData){
-                if (estimateData[key] != undefined) form.append(key, estimateData[key]);
+          .then(async (res) => {
+            try {
+              const endpoint = `/projects/${project_id}/project_estimate`;
+
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'POST',
+                data: estimateData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
             }
-            
-            const options = {
-              baseUrl: this.currentURL,
-              body: form,
-              headers: {
-                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
-              }
-            }
-            const response = await got.post(endpoint, options)
-            resolve(response)
-          } catch (error) {
+          })
+          .catch((error) => {
             reject(error)
-          }
-        })
-        .catch((error) => {
-          reject(error)
-        })
+          })
       } else {
         reject(new Error('Undefined Authorization Code'))
       }
@@ -765,31 +724,26 @@ class CorIntegration {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
-        .then(async (res) => {
-          try {
-            const endpoint = `/projects/${project_id}/project_estimate/${estimate_id}`;
-  
-            const form = new FormData();
-            for(let key in estimateData){
-                if (estimateData[key] != undefined) form.append(key, estimateData[key]);
+          .then(async (res) => {
+            try {
+              const endpoint = `/projects/${project_id}/project_estimate/${estimate_id}`;
+
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'PUT',
+                data: estimateData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
             }
-  
-            const options = {
-              baseUrl: this.currentURL,
-              body: form,
-              headers: {
-                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
-              }
-            }
-            const response = await got.put(endpoint, options)
-            resolve(response)
-          } catch (error) {
+          })
+          .catch((error) => {
             reject(error)
-          }
-        })
-        .catch((error) => {
-          reject(error)
-        })
+          })
       } else {
         reject(new Error('Undefined Authorization Code'))
       }
@@ -807,31 +761,26 @@ class CorIntegration {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
-        .then(async (res) => {
-          try {
-            const endpoint = `/hours`;
-  
-            const form = new FormData();
-            for(let key in hourData){
-                if (hourData[key] != undefined) form.append(key, hourData[key]);
+          .then(async (res) => {
+            try {
+              const endpoint = `/hours`;
+
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'POST',
+                data: hourData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
             }
-            
-            const options = {
-              baseUrl: this.currentURL,
-              body: form,
-              headers: {
-                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
-              }
-            }
-            const response = await got.post(endpoint, options)
-            resolve(response)
-          } catch (error) {
+          })
+          .catch((error) => {
             reject(error)
-          }
-        })
-        .catch((error) => {
-          reject(error)
-        })
+          })
       } else {
         reject(new Error('Undefined Authorization Code'))
       }
@@ -850,31 +799,26 @@ class CorIntegration {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
-        .then(async (res) => {
-          try {
-            const endpoint = `/hours/${hour_id}`;
-  
-            const form = new FormData();
-            for(let key in hourData){
-                if (hourData[key] != undefined) form.append(key, hourData[key]);
+          .then(async (res) => {
+            try {
+              const endpoint = `/hours/${hour_id}`;
+
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'PUT',
+                data: hourData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
             }
-  
-            const options = {
-              baseUrl: this.currentURL,
-              body: form,
-              headers: {
-                Authorization: `Bearer ${JSON.parse(res.body).access_token}`
-              }
-            }
-            const response = await got.put(endpoint, options)
-            resolve(response)
-          } catch (error) {
+          })
+          .catch((error) => {
             reject(error)
-          }
-        })
-        .catch((error) => {
-          reject(error)
-        })
+          })
       } else {
         reject(new Error('Undefined Authorization Code'))
       }

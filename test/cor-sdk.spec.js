@@ -85,9 +85,26 @@ test.group('CorIntegration TESTING', () => {
                     console.log(chalk.red(`\t${err}`))
                 }
             })
-
         assert.equal(result.statusCode,200)
         
+    })
+
+    test('Should send a request to any valid endpoint', async (assert) => {
+        let result = null;
+        const cor = await new CorIntegration(Config)
+
+        await cor._sendRequest({
+            endpoint: "/",
+            type: "GET"
+        }).then(res => {
+            result = res
+        }).catch(err => {
+            console.log('\x1b[31m%s\x1b[0m', err)
+            result = err
+        })
+
+        assert.equal(result.statusCode,200)
+
     })
 
     test.skip('Should create an user', async (assert) => {
