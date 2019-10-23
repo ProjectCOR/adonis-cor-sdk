@@ -299,6 +299,41 @@ class CorIntegration {
   }
 
   /**
+   * Delete User by passing a user_id
+   *
+   * @param {Number} user_id
+   * @returns {Promise}
+   * @memberof CorIntegration
+   */
+  deleteUser(user_id) {
+    return new Promise(async (resolve, reject) => {
+      if (this.auth_code) {
+        this._getToken()
+          .then(async (res) => {
+            try {
+              const endpoint = `/users/${user_id}`;
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'DELETE',
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
+            }
+          })
+          .catch((error) => {
+            reject(error)
+          })
+      } else {
+        reject(new Error('Undefined Authorization Code'))
+      }
+    })
+  }
+
+  /**
    * Create a Client by passing a Client Data
    *
    * @param {Object} [clientData={}]
