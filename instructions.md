@@ -23,6 +23,7 @@ and in your `.env` file
 
 ```bash
 COR_ENV={"live"|"sandbox"}
+APP_DOMAIN={"https://your_domain.com"}
 ```
 
 

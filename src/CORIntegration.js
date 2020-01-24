@@ -30,6 +30,7 @@ class CorIntegration {
   constructor(Config) {
     this.config = {}
     this.env = Config.env || devVariables.envName;
+    this.origin = Config.app_domain || null
     this.auth_code = Config.auth_code || null;
     this.sourceURLs = Config.sourceURLs || {
       sandbox: devVariables.apiEndpoint,
@@ -41,6 +42,7 @@ class CorIntegration {
       this.config = Config.merge('cor-sdk', {
         sourceURLs: this.sourceURLs,
         env: this.sourceURLs,
+        origin: this.origin,
         auth_code: this.auth_code
       })
     }
@@ -89,6 +91,26 @@ class CorIntegration {
    */
   get env() {
     return this._config.env;
+  }
+
+  /**
+   * Set origin
+   * 
+   * @param {String} origin
+   * @memberof CorIntegration
+   */
+  set origin(origin) {
+    this._config.origin = origin;
+  }
+
+  /**
+   * Get Origin
+   * 
+   * @returns {String}
+   * @memberof CorIntegration
+   */
+  get origin() {
+    return this._config.origin;
   }
 
   /**
@@ -189,11 +211,16 @@ class CorIntegration {
       if (data[key] != undefined) form.append(key, data[key]);
     }
 
+    if (this.origin != undefined){
+      headers['Origin'] = this.origin;
+    }
+
     const options = {
       baseUrl: this.currentURL,
       method: type.toUpperCase(),
       body: form,
-      headers: headers
+      headers: headers,
+      retry:0
     }
     return await got(endpoint, options)
   }

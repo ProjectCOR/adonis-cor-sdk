@@ -15,6 +15,7 @@ const CorIntegration = require('../src/CorIntegration')
 const chalk = require('chalk')
 
 const auth_code = 'hd2LZ2YHHT2zE8Fh9qebSJfrzU7525Gz85xhkN4eMt6cD8kadzukUvbtg4hT4kMT';
+const trusted_origin = 'https://advcor-interconexion-test.azurewebsites.net'
 
 test.group('CorIntegration TESTING', () => {
     test('Should check the server availability', async (assert) => {
@@ -73,6 +74,7 @@ test.group('CorIntegration TESTING', () => {
         const cor = await new CorIntegration(Config)
 
         cor.auth_code = auth_code
+        cor.origin = trusted_origin;
         await cor._getToken()
             .then((res) => {
                 result = res
@@ -104,6 +106,23 @@ test.group('CorIntegration TESTING', () => {
         })
 
         assert.equal(result.statusCode,200)
+
+    })
+
+    test.skip('Should return an error when a request is sent without an origin', async (assert) => {
+        let result = null;
+        const cor = await new CorIntegration(Config)
+        cor.auth_code = auth_code
+
+        await cor._getToken()
+        .then(res => {
+            result = res
+        })
+        .catch(err => {
+            result = err
+        })
+
+        assert.ok(result instanceof Error)
 
     })
 
@@ -158,6 +177,7 @@ test.group('CorIntegration TESTING', () => {
         const cor = await new CorIntegration(Config)
 
         cor.auth_code = auth_code
+        cor.origin = trusted_origin;
         
         await cor.updateUser(2271, userData)
             .then((res) => {

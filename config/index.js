@@ -32,7 +32,17 @@ module.exports = {
   | The environment where the sdk will be pointing
   |
   */
-  env: Env.get('COR_ENV', 'sandbox')
+  env: Env.get('COR_ENV', 'sandbox'),
+
+  /*
+  |--------------------------------------------------------------------------
+  | App Domain
+  |--------------------------------------------------------------------------
+  |
+  | The app domain from the origin
+  |
+  */
+ app_domain: Env.get('APP_DOMAIN', null)
   
 
 }
