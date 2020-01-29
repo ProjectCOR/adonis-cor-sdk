@@ -30,7 +30,7 @@ class CorIntegration {
   constructor(Config) {
     this.config = {}
     this.env = Config.env || devVariables.envName;
-    this.origin = Config.app_domain || null
+    this.app_domain = Config.app_domain || null    
     this.auth_code = Config.auth_code || null;
     this.sourceURLs = Config.sourceURLs || {
       sandbox: devVariables.apiEndpoint,
@@ -41,8 +41,8 @@ class CorIntegration {
     if (Config.merge !== undefined) {
       this.config = Config.merge('cor-sdk', {
         sourceURLs: this.sourceURLs,
-        env: this.sourceURLs,
-        origin: this.origin,
+        env: this.env,
+        app_domain: this.app_domain,
         auth_code: this.auth_code
       })
     }
@@ -94,23 +94,23 @@ class CorIntegration {
   }
 
   /**
-   * Set origin
+   * Set app_domain
    * 
-   * @param {String} origin
+   * @param {String} app_domain
    * @memberof CorIntegration
    */
-  set origin(origin) {
-    this._config.origin = origin;
+  set app_domain(app_domain) {
+    this._config.app_domain = app_domain;
   }
 
   /**
-   * Get Origin
+   * Get app_domain
    * 
    * @returns {String}
    * @memberof CorIntegration
    */
-  get origin() {
-    return this._config.origin;
+  get app_domain() {
+    return this._config.app_domain;
   }
 
   /**
@@ -210,9 +210,8 @@ class CorIntegration {
     for (let key in data) {
       if (data[key] != undefined) form.append(key, data[key]);
     }
-
-    if (this.origin != undefined){
-      headers['Origin'] = this.origin;
+    if (this.app_domain != undefined){
+      headers['Origin'] = this.app_domain;
     }
 
     const options = {

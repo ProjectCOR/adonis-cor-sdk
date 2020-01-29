@@ -74,7 +74,7 @@ test.group('CorIntegration TESTING', () => {
         const cor = await new CorIntegration(Config)
 
         cor.auth_code = auth_code
-        cor.origin = trusted_origin;
+        cor.app_domain = trusted_origin;
         await cor._getToken()
             .then((res) => {
                 result = res
@@ -177,7 +177,7 @@ test.group('CorIntegration TESTING', () => {
         const cor = await new CorIntegration(Config)
 
         cor.auth_code = auth_code
-        cor.origin = trusted_origin;
+        cor.app_domain = trusted_origin;
         
         await cor.updateUser(2271, userData)
             .then((res) => {
