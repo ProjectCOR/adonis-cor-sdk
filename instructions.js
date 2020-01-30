@@ -14,12 +14,13 @@ const path = require('path')
 
 module.exports = async (cli) => {
   try {
-
-    const exists = await cli.pathExists(path.join(cli.helpers.configPath(), 'cor-sdk.js'))
-
-    if (exists) {
-      await cli.removeFile(path.join(cli.helpers.configPath(), 'cor-sdk.js'))
-    }
+    console.log('Testing purpose')
+    // const exists = await cli.pathExists(path.join(cli.helpers.configPath(), 'cor-sdk.js'))
+    
+    // if (exists) {
+    //   this.info('The file exist. Procedding to remove it')
+    //   await cli.removeFile(path.join(cli.helpers.configPath(), 'cor-sdk.js'))
+    // }
     
     await cli.copy(path.join(__dirname, 'config/index.js'), path.join(cli.helpers.configPath(), 'cor-sdk.js'))
     cli.command.completed('create', 'config/cor-sdk.js')
