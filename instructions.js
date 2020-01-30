@@ -19,18 +19,19 @@ module.exports = async (cli) => {
     console.log(typeof exists, exists)
     cli.command.completed(`Exist`, exists)
     if (exists) {
-      this.command.info('The file exist. Proceeding to remove it')
+      cli.command.info('The file exist. Proceeding to remove it')
       await cli.command.removeFile(path.join(cli.helpers.configPath(), 'cor-sdk.js'))
       await cli.copy(path.join(__dirname, 'config/index.js'), path.join(cli.helpers.configPath(), 'cor-sdk.js'))
       cli.command.completed('updated', 'config/cor-sdk.js')
     }else{
-      this.command.info('The file does not exist. Proceeding to create it')
+      cli.command.info('The file does not exist. Proceeding to create it')
       await cli.copy(path.join(__dirname, 'config/index.js'), path.join(cli.helpers.configPath(), 'cor-sdk.js'))
       cli.command.completed('created', 'config/cor-sdk.js')
     }
     
     
   } catch (error) {
+    console.log(error)
     cli.command.warn('config/cor-sdk.js already exists. Copy the config file from the following url')
     cli.command.warn('http://bit.ly/2RFTznS')
   }
