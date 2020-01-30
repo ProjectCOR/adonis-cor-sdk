@@ -14,17 +14,18 @@ const path = require('path')
 
 module.exports = async (cli) => {
   try {
-    console.log('Testing purpose')
-    // const exists = await cli.pathExists(path.join(cli.helpers.configPath(), 'cor-sdk.js'))
+    cli.command.info(`Checking if file exist: ${path.join(cli.helpers.configPath(), 'cor-sdk.js')}`)
+    const exists = await cli.command.pathExists(path.join(cli.helpers.configPath(), 'cor-sdk.js'))
     
-    // if (exists) {
-    //   this.info('The file exist. Procedding to remove it')
-    //   await cli.removeFile(path.join(cli.helpers.configPath(), 'cor-sdk.js'))
-    // }
+    if (exists) {
+      this.command.info('The file exist. Procedding to remove it')
+      await cli.command.removeFile(path.join(cli.helpers.configPath(), 'cor-sdk.js'))
+    }
     
     await cli.copy(path.join(__dirname, 'config/index.js'), path.join(cli.helpers.configPath(), 'cor-sdk.js'))
     cli.command.completed('create', 'config/cor-sdk.js')
   } catch (error) {
-    console.log("config file already exist!")
+    cli.command.warn('config/cor-sdk.js already exists.')
+    // console.log("config file already exist!")
   }
 }
