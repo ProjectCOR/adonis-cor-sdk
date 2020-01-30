@@ -30,6 +30,6 @@ module.exports = async (cli) => {
     
   } catch (error) {
     cli.command.warn('config/cor-sdk.js already exists. Copy the config file from the following url')
-    console.log('http://bit.ly/2RFTznS')
+    cli.command.warn('http://bit.ly/2RFTznS')
   }
 }
