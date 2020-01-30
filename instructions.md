@@ -74,5 +74,6 @@ It is always helpful if we try to follow certain practices when creating issues 
 
 ## License
 
-Adonis COR SDK is open-sourced software licensed under the ISC license.
+Adonis COR SDK is open-sourced software licensed under the ISC license. Read [LICENSE](https://github.com/ProjectCOR/adonis-cor-sdk/blob/master/LICENSE) for more licensing information.
+ 
 
