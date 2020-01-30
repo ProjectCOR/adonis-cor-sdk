@@ -4,7 +4,8 @@
   "description": "Package inspired in Services to provide support to COR API Integration.",
   "main": "index.js",
   "scripts": {
-    "test": "node test/cor-sdk.spec.js"
+    "test": "node test/cor-sdk.spec.js",
+    "postinstall": "adonis run:instructions ./node_modules/adonis-cor-sdk/"
   },
   "keywords": [
     "api",
