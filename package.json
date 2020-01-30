@@ -1,6 +1,6 @@
 {
   "name": "adonis-cor-sdk",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "Package inspired in Services to provide support to COR API Integration.",
   "main": "index.js",
   "scripts": {
