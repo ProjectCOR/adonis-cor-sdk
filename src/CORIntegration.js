@@ -1099,5 +1099,43 @@ class CorIntegration {
     })
   }
 
+  /**
+   * Update a Task by passing a task_id and Task Data
+   *
+   * @param {Number} task_id
+   * @param {Object} [hourData={}]
+   * @returns {Promise}
+   * @memberof CorIntegration
+   */
+  updateTask(task_id, taskData = {}) {
+    return new Promise(async (resolve, reject) => {
+      if (this.auth_code) {
+        this._getToken()
+          .then(async (res) => {
+            try {
+              const endpoint = `/tasks/${task_id}`;
+
+              const response = await this._sendRequest({
+                endpoint: endpoint,
+                type: 'PUT',
+                data: taskData,
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(res.body).access_token}`
+                }
+              })
+              resolve(response)
+            } catch (error) {
+              reject(error)
+            }
+          })
+          .catch((error) => {
+            reject(error)
+          })
+      } else {
+        reject(new Error('Undefined Authorization Code'))
+      }
+    })
+  }
+
 
 } module.exports = CorIntegration
