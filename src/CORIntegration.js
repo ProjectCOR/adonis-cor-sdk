@@ -692,19 +692,20 @@ class CorIntegration {
   }
 
   /**
-   * Create a Fee by passing a Fee Data
+   * Create a Fee by passing a client_id and Fee Data
    *
+   * @param {String} [client_id]
    * @param {Object} [feeData={}]
    * @returns {Promise} 
    * @memberof CorIntegration
    */
-  createFee(feeData = {}) {
+  createFee(client_id, feeData = {}) {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
           .then(async (res) => {
             try {
-              const endpoint = `/fees`;
+              const endpoint = `/clients/${client_id}/fees`;
 
               const response = await this._sendRequest({
                 endpoint: endpoint,
@@ -729,20 +730,21 @@ class CorIntegration {
   }
 
   /**
-   * Update a Fee by passing a fee_id and Fee Data
+   * Update a Fee by passing a client_id, fee_id and Fee Data
    *
+   * @param {String} [client_id]
    * @param {Number} fee_id
    * @param {Object} [feeData={}]
    * @returns {Promise}
    * @memberof CorIntegration
    */
-  updateFee(fee_id, feeData = {}) {
+  updateFee(client_id, fee_id, feeData = {}) {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
           .then(async (res) => {
             try {
-              const endpoint = `/fees/${fee_id}`;
+              const endpoint = `/clients/${client_id}/fees/${fee_id}`;
 
               const response = await this._sendRequest({
                 endpoint: endpoint,
@@ -767,19 +769,20 @@ class CorIntegration {
   }
 
   /**
-   * Delete a Fee by passing a fee_id
+   * Delete a Fee by passing a client_id and fee_id
    *
+   * @param {String} [client_id]
    * @param {Number} fee_id
    * @returns {Promise}
    * @memberof CorIntegration
    */
-  deleteFee(fee_id) {
+  deleteFee(client_id, fee_id) {
     return new Promise(async (resolve, reject) => {
       if (this.auth_code) {
         this._getToken()
           .then(async (res) => {
             try {
-              const endpoint = `/fees/${fee_id}`;
+              const endpoint = `/clients/${client_id}/fees/${fee_id}`;
               const response = await this._sendRequest({
                 endpoint: endpoint,
                 type: 'DELETE',
