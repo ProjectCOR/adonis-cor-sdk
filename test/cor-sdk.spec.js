@@ -238,4 +238,30 @@ test.group('CorIntegration TESTING', () => {
             assert.equal(result.statusCode,200)
         
     })
+
+    test.skip('Should create a Fee', async (assert) => {
+        const feeData = { 
+                "id": 4, 
+                "name": "fees_sdk", 
+                "estimate": 10000, 
+                "start": "2019-08-23T00:00:00" 
+            }
+
+        let result = null;
+        const cor = await new CorIntegration(Config)
+
+        cor.auth_code = auth_code        
+
+        await cor.createFee(2, feeData)
+            .then((res) => {
+                result = res
+            })
+            .catch((err) => {
+                result = err
+                console.log('\x1b[31m%s\x1b[0m', err.response.body)
+            })            
+            assert.equal(result.statusCode,200)
+        
+    })
+
 })
